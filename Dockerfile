@@ -14,7 +14,7 @@ RUN npm install
 
 # Bundle app source
 COPY . .
-RUN npm install > npm-install.log 2>&1
+RUN npm run build
 
 
 EXPOSE 3000

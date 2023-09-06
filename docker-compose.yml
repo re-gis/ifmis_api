@@ -13,7 +13,7 @@ services:
     ports:
       - "8060:3000"
     networks:
-      - rca-network
+      - oreDigital-network
 
   postgres:
     image: postgres:latest
@@ -24,10 +24,10 @@ services:
     ports:
       - "35000:5432"
     networks:
-      - rca-network
+      - oreDigital-network
 
 networks:
-  rca-network:
+  oreDigital-network:
     driver: bridge
 
 

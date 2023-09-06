@@ -12,6 +12,7 @@ import { InitiatorAudit } from 'src/audits/Initiator.audit';
 import { Role } from './role.entity';
 import { EAccountStatus } from 'src/enums/EAccountStatus.enum';
 import { EGender } from 'src/enums/EGender.enum';
+import { File } from 'src/file/File';
 @Entity('users')
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class User extends InitiatorAudit {

@@ -2,18 +2,18 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { Role } from './entitties/role.entity';
-import { User } from './entitties/user.entity';
-import { HomeModule } from './home/home.module';
 import { HomeController } from './home/home.controller';
-import { AuthController } from './auth/auth.controller';
-import { RoleService } from './roles/roles.service';
 import { MailingModule } from './mailing/mailing.module';
-import { RolesModule } from './roles/roles.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/auth.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { User } from './entitties/user.entity';
+import { Role } from './entitties/role.entity';
+import { RoleService } from './roles/roles.service';
+import { File } from './file/File';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,7 +28,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Role, File, Report],
+        entities: [User, Role, File],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -44,10 +44,8 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
       },
     }),
     UsersModule,
-    RolesModule,
     MailingModule,
     AuthModule,
-    HomeModule,
   ],
   controllers: [AuthController, HomeController],
 })

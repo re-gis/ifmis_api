@@ -13,6 +13,7 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { Roles } from 'src/utils/decorators/roles.decorator';
 import { UpdateUserDto } from 'src/dtos/update-user.dto';
 import { UsersService } from './users.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('users')
 @Controller('users')
@@ -49,9 +50,4 @@ export class UsersController {
   deleteUser(@Param('id') id: number) {
     return this.usersService.deleteUser(id);
   }
-}
-function ApiTags(
-  arg0: string,
-): (target: typeof UsersController) => void | typeof UsersController {
-  throw new Error('Function not implemented.');
 }
