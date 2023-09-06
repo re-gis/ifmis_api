@@ -11,7 +11,7 @@ services:
       NODE_ENV: development
       PORT: 3000
     ports:
-      - "8060:3000"
+      - "8050:3000"
     networks:
       - oreDigital-network
 
