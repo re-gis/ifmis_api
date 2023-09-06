@@ -5,6 +5,7 @@ import {
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { NextFunction, Request } from 'express';
 import { UsersService } from 'src/users/users.service';

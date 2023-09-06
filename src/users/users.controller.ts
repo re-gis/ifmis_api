@@ -12,11 +12,12 @@ import { NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { Roles } from 'src/utils/decorators/roles.decorator';
 import { UpdateUserDto } from 'src/dtos/update-user.dto';
+import { UsersService } from './users.service';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UserService) {}
+  constructor(private usersService: UsersService) {}
 
   @Get('/all')
   @Roles('ADMIN')

@@ -2,18 +2,18 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { AuthModule } from './auth/auth.module';
 import { Role } from './entitties/role.entity';
 import { User } from './entitties/user.entity';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { HomeModule } from './home/home.module';
 import { HomeController } from './home/home.controller';
 import { AuthController } from './auth/auth.controller';
 import { RoleService } from './roles/roles.service';
 import { MailingModule } from './mailing/mailing.module';
 import { RolesModule } from './roles/roles.module';
-
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 @Module({
   imports: [
     ConfigModule.forRoot({
