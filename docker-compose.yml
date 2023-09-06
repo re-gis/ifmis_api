@@ -29,6 +29,3 @@ services:
 networks:
   oreDigital-network:
     driver: bridge
-
-
-
