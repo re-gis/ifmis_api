@@ -13,6 +13,7 @@ import { User } from './entitties/user.entity';
 import { Role } from './entitties/role.entity';
 import { RoleService } from './roles/roles.service';
 import { File } from './file/File';
+import { EmployeesModule } from './employees/employees.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { File } from './file/File';
     UsersModule,
     MailingModule,
     AuthModule,
+    EmployeesModule,
   ],
   controllers: [AuthController, HomeController],
 })
