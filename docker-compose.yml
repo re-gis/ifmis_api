@@ -1,28 +1,49 @@
+# version: '3.8'
+# services:
+#   api:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     depends_on:
+#       - postgres
+#     environment:
+#       DATABASE_URL: postgres://postgres:VALENS@postgres:5432/oreDigital-db
+#       NODE_ENV: development
+#       PORT: 3000
+#     ports:
+#       - "8050:3000"
+#     networks:
+#       - oreDigital-network
+
+#   postgres:
+#     image: postgres:latest
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: VALENS
+#       POSTGRES_DB: oreDigital-db
+#     ports:
+#       - "35000:5432"
+#     networks:
+#       - oreDigital-network
+
+# networks:
+#   oreDigital-network:
+#     driver: bridge
+
+
+
 version: '3.8'
 services:
   api:
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - postgres
     environment:
-      DATABASE_URL: postgres://postgres:VALENS@postgres:5432/oreDigital-db
+      DATABASE_URL: 'postgres://hjkaqzts:8aALgvqCK73ZB5kwVp6TY1EPxGuNGXx5@mahmud.db.elephantsql.com/hjkaqzts'
       NODE_ENV: development
       PORT: 3000
     ports:
       - "8050:3000"
-    networks:
-      - oreDigital-network
-
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: VALENS
-      POSTGRES_DB: oreDigital-db
-    ports:
-      - "35000:5432"
     networks:
       - oreDigital-network
 
