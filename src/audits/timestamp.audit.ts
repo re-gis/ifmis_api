@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { SerializeOptions } from '@nestjs/common';
 import { CreateDateColumn } from 'typeorm';
 

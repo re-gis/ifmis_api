@@ -8,6 +8,7 @@ import { User } from 'src/entitties/user.entity';
 import { VerifyAccountDTO } from 'src/dtos/verify-account.dto';
 import { ApiResponse } from 'src/payload/apiResponse';
 import { ResetPasswordDTO } from 'src/dtos/reset-password.dto';
+import { Roles } from 'src/utils/decorators/roles.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -45,6 +46,7 @@ export class AuthController {
   }
 
   @Post('reset_password')
+  @Roles('ADMIN')
   async resetPassword(@Body() dto: ResetPasswordDTO): Promise<ApiResponse> {
     return new ApiResponse(
       true,

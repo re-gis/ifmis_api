@@ -64,8 +64,9 @@ export class UsersService {
     });
     if (!response) {
       throw new NotFoundException(`${entity} not found`);
+    } else {
+      return response;
     }
-    return response;
   }
 
   generateRandomFourDigitNumber(): number {

@@ -14,6 +14,7 @@ import { Role } from './entitties/role.entity';
 import { RoleService } from './roles/roles.service';
 import { File } from './file/File';
 import { EmployeesModule } from './employees/employees.module';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -48,12 +49,13 @@ import { EmployeesModule } from './employees/employees.module';
     MailingModule,
     AuthModule,
     EmployeesModule,
+    QuestionModule,
   ],
   controllers: [AuthController, HomeController],
 })
 export class AppModule implements OnModuleInit {
   constructor(private readonly roleService: RoleService) {}
-
+  
   async onModuleInit() {
     let roles = await this.roleService.getAllRoles();
     if (!roles || roles.length == 0) {
