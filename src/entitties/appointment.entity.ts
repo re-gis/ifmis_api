@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { Status } from 'src/enums/Status.enum';
 
 @Entity('appointments')
 export class Appointment {
@@ -32,4 +34,7 @@ export class Appointment {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @Column()
+  status: Status;
 }
