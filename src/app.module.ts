@@ -15,6 +15,8 @@ import { RoleService } from './roles/roles.service';
 import { File } from './file/File';
 import { EmployeesModule } from './employees/employees.module';
 import { QuestionModule } from './question/question.module';
+import { AppointmentsModule } from './appointments/appointments.module';
+import { AppointmentsService } from './appointments/appointments.service';
 
 @Module({
   imports: [
@@ -50,8 +52,10 @@ import { QuestionModule } from './question/question.module';
     AuthModule,
     EmployeesModule,
     QuestionModule,
+    AppointmentsModule,
   ],
   controllers: [AuthController, HomeController],
+  providers: [AppointmentsService],
 })
 export class AppModule implements OnModuleInit {
   constructor(private readonly roleService: RoleService) {}

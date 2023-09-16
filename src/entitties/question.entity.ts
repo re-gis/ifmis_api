@@ -8,9 +8,10 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Status } from 'src/enums/Status.enum';
+import { InitiatorAudit } from 'src/audits/Initiator.audit';
 
-@Entity('questions')
-export class Question {
+@Entity()
+export class Question extends InitiatorAudit {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -26,8 +27,24 @@ export class Question {
   @Column()
   status: Status;
 
+  @Column({ nullable: true })
+  response: Object;
+
   // Linking the user with his question
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  constructor(
+    content: string,
+    status: Status,
+    response: Object,
+    filePath: string,
+  ) {
+    super();
+    this.content = content;
+    this.filePath = filePath;
+    this.response = response;
+    this.status = status;
+  }
 }

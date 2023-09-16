@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
   NotFoundException,
   BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -14,11 +15,11 @@ import { User } from 'src/entitties/user.entity';
 import { Status } from 'src/enums/Status.enum';
 import { RoleService } from 'src/roles/roles.service';
 import { Repository } from 'typeorm';
-import { Request } from 'express';
 import { UsersService } from 'src/users/users.service';
 import { QuestionDto } from 'src/dtos/question.dto';
 import { Exception } from 'handlebars';
 import { QnReponse } from 'src/entitties/QnResponse';
+import { QnReponseDto } from 'src/dtos/QnReponseDto';
 
 @Injectable()
 export class QuestionService {
@@ -31,31 +32,50 @@ export class QuestionService {
     private roleService: RoleService,
   ) {}
 
-  async getQuestionOwner(qnId: number) {
-    const available = await this.quesRepo.findOne({
-      where: {
-        id: qnId,
-      },
+  async getQuestionOwner(qnId: number): Promise<User> {
+    const question = await this.quesRepo.findOne({
+      where: { id: qnId },
+      relations: ['user'],
     });
-
-    if (!available) {
-      throw new NotFoundException('Question not found!');
-    } else {
-      return available.user;
+    if (!question) {
+      throw new NotFoundException(`Question with ID ${qnId} not found!`);
     }
+
+    if (!question.user) {
+      throw new NotFoundException(
+        `Owner for question with ID ${qnId} not found!`,
+      );
+    }
+
+    return question.user;
   }
 
-  async getUserQns(userId: number) {
+  async getUserQns(userId: number): Promise<Question[]> {
+    // User exists
     const availableUser = await this.userService.getUserById(userId, 'User');
-    const response = await this.quesRepo.find({
-      where: {
-        // user_id: availableUser.id,
-      },
+    if (!availableUser) {
+      throw new NotFoundException(`User ${userId} not found!`);
+    }
+    // Get questions
+    const questions = await this.quesRepo.find({
+      where: { user: { id: userId } },
     });
+
+    if (!questions.length) {
+      throw new NotFoundException(`No questions found for user ${userId}`);
+    }
+
+    return questions;
   }
 
-  async getAllQuestions() {
-    const questions = await this.quesRepo.find();
+  async getAllQuestions(): Promise<Question[]> {
+    const questions = await this.quesRepo.find({
+      relations: ['user'],
+    });
+
+    if (!questions.length) {
+      throw new NotFoundException('No questions found!');
+    }
     return questions;
   }
 
@@ -89,41 +109,27 @@ export class QuestionService {
     return approvedQuestions;
   }
 
-  // async getYourQuestions(req: Request, res: Response) {
-  //   const authorization = req.headers.authorization;
-  //   if (authorization) {
-  //     const token = authorization.split(' ')[1];
-  //     if (!authorization.toString().startsWith('Bearer'))
-  //       throw new UnauthorizedException('Invalid token');
-  //     const { tokenVerified, error } = this.jwtService.verify(token, {
-  //       secret: this.configService.get('SECRET_KEY'),
-  //     });
-  //     if (error) throw new UnauthorizedException(error.message);
-  //     const decoded: any = await this.jwtService.decode(token);
-  //     const owner = await this.getQuestionOwner(decoded.id);
-  //     const myQuestions = await this.quesRepo.findOne({
-  //       where: {
-  //         user: owner
-  //       },
-  //     });
-  //   }
-  // }
-
-  async createQuestion(body: Question) {
+  async createQuestion(
+    body: QuestionDto,
+  ): Promise<{ success: boolean; message: string; data: Question }> {
     const { content } = body;
     if (!content) throw new BadRequestException('Content must be available...');
-    const qn = new Question();
-    qn.content = content;
-    qn.status = Status.PENDING;
     try {
-      const qnEntity = this.quesRepo.create(qn);
-      const createdEntity = this.quesRepo.save({ ...qnEntity });
+      const qn: Question = this.quesRepo.create({
+        content: content,
+        status: Status.PENDING,
+      });
+
+      await this.quesRepo.save(qn);
+
       return {
         success: true,
-        message: 'Your question is submitted...',
+        message: 'Your question was submitted...',
+        data: qn,
       };
     } catch (error) {
-      throw new Exception(error.message);
+      console.log(error)
+      throw new InternalServerErrorException('Error saving the question...');
     }
   }
 
@@ -138,15 +144,34 @@ export class QuestionService {
     return response;
   }
 
-  async respondQn(qnId: number, body: QnReponse) {
+  async respondQn(
+    qnId: number,
+    body: QnReponseDto,
+  ): Promise<{ success: boolean; message: String; data: Object }> {
     // Get the question from database
     const qn = await this.getQnById(qnId, 'Question');
-    if (!qn) throw new NotFoundException('Question not found!');
-    if (qn.status != Status.PENDING) {
-      throw new Exception('Question approved or rejected');
-    } else {
-      // save response
-      
+    if (!qn) {
+      throw new NotFoundException('Question not found!');
+    }
+
+    if (qn.status !== Status.PENDING) {
+      throw new BadRequestException('Question is already approved or rejected');
+    }
+
+    qn.response = body.content;
+    qn.status = Status.APPROVED;
+
+    try {
+      await this.quesRepo.save(qn);
+      return {
+        success: true,
+        message: 'Question approved',
+        data: qn,
+      };
+    } catch (e) {
+      throw new InternalServerErrorException(
+        'Error while approving the question...',
+      );
     }
   }
 }

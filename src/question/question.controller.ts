@@ -1,35 +1,39 @@
 /* eslint-disable */
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/utils/decorators/roles.decorator';
 import { QuestionService } from './question.service';
+import { QuestionDto } from 'src/dtos/question.dto';
 
 @Controller('question')
 export class QuestionController {
   constructor(private questionService: QuestionService) {}
   @Get('/all')
   @Roles('ADMIN')
-  getAllQuestions() {
+  async getAllQuestions(): Promise<any> {
     return this.questionService.getAllQuestions();
   }
 
   @Get('/approved')
   @Roles('ADMIN')
-  getApprovedQuestions() {
+  async getApprovedQuestions(): Promise<any> {
     return this.questionService.getApprovedQuestions();
   }
 
   @Get('/rejected')
   @Roles('ADMIN')
-  getRejectedQuestions() {
+  async getRejectedQuestions(): Promise<any> {
     return this.questionService.getRejectedQuestions();
   }
 
   @Get('/pending')
   @Roles('ADMIN')
-  getPendingQuestions() {
+  async getPendingQuestions(): Promise<any> {
     return this.questionService.getPendingQuestions();
   }
 
-  // @Get('/')
+  @Post('/create')
+  async askQuestion(@Body() askQuestionDto: QuestionDto): Promise<any> {
+    return this.questionService.createQuestion(askQuestionDto);
+  }
 }
