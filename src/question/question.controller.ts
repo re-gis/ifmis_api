@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/utils/decorators/roles.decorator';
 import { QuestionService } from './question.service';
@@ -35,5 +35,10 @@ export class QuestionController {
   @Post('/create')
   async askQuestion(@Body() askQuestionDto: QuestionDto): Promise<any> {
     return this.questionService.createQuestion(askQuestionDto);
+  }
+
+  @Patch('/reject/:id')
+  async rejectQuestion(@Param('id') qnId: number): Promise<any> {
+    return this.questionService.rejectQuestion(qnId);
   }
 }

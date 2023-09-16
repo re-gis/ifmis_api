@@ -128,7 +128,7 @@ export class QuestionService {
         data: qn,
       };
     } catch (error) {
-      console.log(error)
+      console.log(error);
       throw new InternalServerErrorException('Error saving the question...');
     }
   }
@@ -173,5 +173,24 @@ export class QuestionService {
         'Error while approving the question...',
       );
     }
+  }
+
+  // Reject a qn
+  async rejectQuestion(qnId: number): Promise<string> {
+    // find the qn first
+    const qn = await this.quesRepo.findOne({ where: { id: qnId } });
+    if (!qn) {
+      throw new NotFoundException(`Question ${qnId} not found!`);
+    }
+
+    if (qn.status === Status.REJECTED) {
+      return `Question ${qnId} already rejected!`;
+    }
+
+    // Reject
+    qn.status = Status.REJECTED;
+    await this.quesRepo.save(qn);
+
+    return `Question ${qnId} rejected...`;
   }
 }

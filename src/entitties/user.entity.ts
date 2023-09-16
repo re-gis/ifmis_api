@@ -13,6 +13,7 @@ import { Role } from './role.entity';
 import { EAccountStatus } from 'src/enums/EAccountStatus.enum';
 import { EGender } from 'src/enums/EGender.enum';
 import { File } from 'src/file/File';
+import { Appointment } from './appointment.entity';
 @Entity('users')
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class User extends InitiatorAudit {
@@ -70,6 +71,9 @@ export class User extends InitiatorAudit {
 
   @Column()
   national_id: String;
+
+  @Column({ nullable: true })
+  appointments: Appointment[];
 
   constructor(
     firstName: String,
