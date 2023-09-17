@@ -17,6 +17,8 @@ import { EmployeesModule } from './employees/employees.module';
 import { QuestionModule } from './question/question.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { AppointmentsService } from './appointments/appointments.service';
+import { Appointment } from './entitties/appointment.entity';
+import { Question } from './entitties/question.entity';
 
 @Module({
   imports: [
@@ -32,7 +34,7 @@ import { AppointmentsService } from './appointments/appointments.service';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Role, File],
+        entities: [User, Role, File, Appointment, Question],
         synchronize: true,
       }),
       inject: [ConfigService],
