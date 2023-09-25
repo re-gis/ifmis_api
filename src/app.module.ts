@@ -57,7 +57,7 @@ import { Question } from './entitties/question.entity';
     AppointmentsModule,
   ],
   controllers: [AuthController, HomeController],
-  providers: [AppointmentsService],
+  providers:[AppointmentsModule],
 })
 export class AppModule implements OnModuleInit {
   constructor(private readonly roleService: RoleService) {}
