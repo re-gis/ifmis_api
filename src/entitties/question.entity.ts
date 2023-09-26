@@ -9,6 +9,7 @@ import {
 import { User } from './user.entity';
 import { Status } from 'src/enums/Status.enum';
 import { InitiatorAudit } from 'src/audits/Initiator.audit';
+import { AnyNsRecord } from 'dns';
 
 @Entity()
 export class Question extends InitiatorAudit {
@@ -27,8 +28,8 @@ export class Question extends InitiatorAudit {
   @Column()
   status: Status;
 
-  @Column({ nullable: true })
-  response: Object;
+  @Column('jsonb', { nullable: true })
+  response: any;
 
   // Linking the user with his question
   @ManyToOne(() => User, (user) => user.id)
@@ -38,7 +39,7 @@ export class Question extends InitiatorAudit {
   constructor(
     content: string,
     status: Status,
-    response: Object,
+    response: any,
     filePath: string,
   ) {
     super();

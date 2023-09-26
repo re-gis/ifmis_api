@@ -29,7 +29,7 @@ export class User extends InitiatorAudit {
   @Column()
   email: String;
 
-  @Column()
+  @Column({nullable: false})
   username: String;
 
   @Column()
@@ -72,7 +72,8 @@ export class User extends InitiatorAudit {
   @Column()
   national_id: String;
 
-  @Column({ nullable: true })
+  @ManyToMany(() => Appointment)
+  @JoinTable()
   appointments: Appointment[];
 
   constructor(
